@@ -81,6 +81,9 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        who: "",
+        col: 0,
+        row: 0,
       }],
       stepNumber: 0,
       xIxNext: true,
@@ -90,13 +93,19 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+    const who = this.state.xIsNext ? "X" : "O";
+    const col = i % 3;
+    const row = Math.floor(i / 3);
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xIsNext ? "X" : "O";
+    squares[i] = who;
     this.setState({
       history: history.concat([{
         squares: squares,
+        who: who,
+        col: col,
+        row: row,
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
@@ -116,14 +125,30 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      const desc = move ?
-        "Go to move #" + move :
-        "Go to game start";
-      return (
-        <li key={move}>
-          <button onClick={() => this.jumpTo(move)} > {desc}</button>
-        </li>
-      )
+      if (move) {
+        const desc = "Go to move #" + move;
+        return (
+          <tr key={move}>
+            <td>
+              {move}
+            </td>
+            <td>
+              {step.who}
+            </td>
+            <td>
+              {step.col + 1}
+            </td>
+            <td>
+              {step.row + 1}
+            </td>
+            <td>
+              <button onClick={() => this.jumpTo(move)} > {desc}</button>
+            </td>
+          </tr>
+        )
+      } else {
+        return;
+      }
     })
 
 
@@ -143,9 +168,20 @@ class Game extends React.Component {
           />
         </div>
         <div className="game-info">
-          <div className="text-amber-500">{status}</div>
-          
-          <ol>{moves}</ol>
+          <div className="game-info-status">{status}</div>
+          <div><button onClick={() => this.jumpTo(0)} >Go to game start</button></div>
+          <table className='game-info-history'>
+            <thead>
+              <th>No.</th>
+              <th>who</th>
+              <th>col</th>
+              <th>row</th>
+              <th>trip</th>
+            </thead>
+            <tbody>
+              {moves}
+            </tbody>
+          </table>
         </div>
       </div>
     );
