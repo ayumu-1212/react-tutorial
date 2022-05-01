@@ -32,24 +32,31 @@ class Board extends React.Component {
     )
   }
 
+  repRow(h, w) {
+    const rows = [];
+    for (let j = 0; j < h; j++) {
+      rows.push(
+        <div className="board-row">
+          {this.repCol(j * w, (j+1) * w - 1)}
+        </div>
+      )
+    }
+    return rows;
+  }
+
+  repCol(s, e) {
+    const cells = [];
+    for (let i = s; i <= e; i++) {
+      cells.push(this.renderSquare(i))
+    }
+    return cells;
+  }
+
+
   render() {
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {this.repRow(3, 3)}
       </div>
     );
   }
