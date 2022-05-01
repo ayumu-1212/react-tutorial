@@ -56,3 +56,7 @@ ol, ul {
 .game-info-history tbody td {
   text-align: center;
 }
+
+.bold-tr {
+  font-weight: bold;
+}
