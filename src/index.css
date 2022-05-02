@@ -60,3 +60,7 @@ ol, ul {
 .bold-tr {
   font-weight: bold;
 }
+
+.go_first_button {
+  margin-right: 1rem;
+}
