@@ -2,17 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-// class Square extends React.Component {
-//   render() {
-//     return (
-//       <button 
-//         className="square"
-//         onClick={() => this.props.onClick()}>
-//         {this.props.value}
-//       </button>
-//     );
-//   }
-// }
 
 function Square(props) {
   return (
@@ -93,7 +82,7 @@ class Game extends React.Component {
         row: 0,
       }],
       stepNumber: 0,
-      xIxNext: true,
+      xIsNext: true,
       selected_index: null,
     }
   }
@@ -135,7 +124,9 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      if (move === this.state.selected_index) {
+      if (move === 0) {
+        return;
+      } else if (move === this.state.selected_index) {
         const desc = "Go to move #" + move;
         return (
           <tr key={move} className='bold-tr'>
@@ -156,7 +147,7 @@ class Game extends React.Component {
             </td>
           </tr>
         )
-      } else if (move) {
+      } else {
         const desc = "Go to move #" + move;
         return (
           <tr key={move}>
@@ -177,8 +168,6 @@ class Game extends React.Component {
             </td>
           </tr>
         )
-      } else {
-        return;
       }
     })
 
