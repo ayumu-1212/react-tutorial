@@ -87,6 +87,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIxNext: true,
+      selected_index: null,
     }
   }
   handleClick(i) {
@@ -109,6 +110,7 @@ class Game extends React.Component {
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
+      selected_index: null,
     });
   }
 
@@ -116,6 +118,7 @@ class Game extends React.Component {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
+      selected_index: step,
     })
   }
   
@@ -125,7 +128,28 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      if (move) {
+      if (move === this.state.selected_index) {
+        const desc = "Go to move #" + move;
+        return (
+          <tr key={move} className='bold-tr'>
+            <td>
+              {move}
+            </td>
+            <td>
+              {step.who}
+            </td>
+            <td>
+              {step.col + 1}
+            </td>
+            <td>
+              {step.row + 1}
+            </td>
+            <td>
+              <button onClick={() => this.jumpTo(move)} >{desc}</button>
+            </td>
+          </tr>
+        )
+      } else if (move) {
         const desc = "Go to move #" + move;
         return (
           <tr key={move}>
@@ -142,7 +166,7 @@ class Game extends React.Component {
               {step.row + 1}
             </td>
             <td>
-              <button onClick={() => this.jumpTo(move)} > {desc}</button>
+              <button onClick={() => this.jumpTo(move)} >{desc}</button>
             </td>
           </tr>
         )
