@@ -126,31 +126,11 @@ class Game extends React.Component {
     const moves = history.map((step, move) => {
       if (move === 0) {
         return;
-      } else if (move === this.state.selected_index) {
-        const desc = "Go to move #" + move;
-        return (
-          <tr key={move} className='bold-tr'>
-            <td>
-              {move}
-            </td>
-            <td>
-              {step.who}
-            </td>
-            <td>
-              {step.col + 1}
-            </td>
-            <td>
-              {step.row + 1}
-            </td>
-            <td>
-              <button onClick={() => this.jumpTo(move)} >{desc}</button>
-            </td>
-          </tr>
-        )
       } else {
         const desc = "Go to move #" + move;
+        const class_name = move === this.state.selected_index ? "bold-tr" : "";
         return (
-          <tr key={move}>
+          <tr key={move} className={class_name}>
             <td>
               {move}
             </td>
