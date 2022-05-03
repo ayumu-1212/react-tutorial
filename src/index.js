@@ -4,8 +4,9 @@ import './index.css';
 
 
 function Square(props) {
+  let class_name = props.is_highlight ? "square highlight" : "square"
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className={class_name} onClick={props.onClick}>
       {props.value}
     </button>
   )
@@ -17,6 +18,7 @@ class Board extends React.Component {
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        is_highlight={this.props.lines.includes(i)}
       />
     )
   }
@@ -41,7 +43,6 @@ class Board extends React.Component {
     return cells;
   }
 
-
   render() {
     return (
       <div>
@@ -65,10 +66,13 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const[a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        winner: squares[a],
+        lines: lines[i],
+      }
     }
   }
-  return null;
+  return {winner: null, lines: [null, null, null]};
 }
 
 class Toggle extends React.Component {
@@ -105,7 +109,8 @@ class Game extends React.Component {
     const who = this.state.xIsNext ? "X" : "O";
     const col = i % 3;
     const row = Math.floor(i / 3);
-    if (calculateWinner(squares) || squares[i]) {
+    const calc = calculateWinner(squares);
+    if (calc.winner || squares[i]) {
       return;
     }
     squares[i] = who;
@@ -140,7 +145,7 @@ class Game extends React.Component {
   render() {
     let history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    const calc = calculateWinner(current.squares);
 
     if (!this.state.isAsc) {
       history = history.reduceRight((p, c) => [...p, c], []);
@@ -176,8 +181,8 @@ class Game extends React.Component {
 
 
     let status;
-    if (winner) {
-      status = "Winner: " + winner;
+    if (calc) {
+      status = "Winner: " + calc.winner;
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
@@ -188,6 +193,7 @@ class Game extends React.Component {
           <Board 
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            lines={calc.lines}
           />
         </div>
         <div className="game-info">
