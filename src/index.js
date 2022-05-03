@@ -72,7 +72,24 @@ function calculateWinner(squares) {
       }
     }
   }
-  return {winner: null, lines: [null, null, null]};
+  let is_draw = true;
+  for (let i = 0; i < 9; i++) {
+    if (squares[i] === null) {
+      is_draw = false;
+      break;
+    } 
+  }
+  if (is_draw) {
+    return {
+      winner: "D",
+      lines: Array(3).fill(null),
+    }
+  } else {
+    return {
+      winner: null, 
+      lines: Array(3).fill(null),
+    }
+  }
 }
 
 class Toggle extends React.Component {
@@ -181,7 +198,9 @@ class Game extends React.Component {
 
 
     let status;
-    if (calc) {
+    if (calc.winner === "D") {
+      status = "Draw Game...";
+    } else if (calc.winner) {
       status = "Winner: " + calc.winner;
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
